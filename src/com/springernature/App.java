@@ -82,7 +82,10 @@ public class App {
             System.out.println("Incorrect no of arguments provided for command:  " + cmd);
         } catch (NumberFormatException nfe) {
             System.out.println("Incorrect argument. Please specify correct integer");
-        } catch (Exception e) {
+        } catch (RuntimeException rte) {
+            System.out.println(rte.getMessage());
+        }
+        catch (Exception e) {
             System.out.println("Sorry your command cant not be processed at this time");
         }
 

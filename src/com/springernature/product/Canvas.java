@@ -18,8 +18,8 @@ public class Canvas {
 
 
     public Canvas (int rows, int cols) {
-        this.height = rows+2; //top and bottom lines.
-        this.width = cols+2;
+        this.width = rows+2; //top and bottom lines.
+        this.height = cols+2;
         initCanvasArray();
     }
 
@@ -29,10 +29,10 @@ public class Canvas {
     private void initCanvasArray() {
         cnvsArray = new char[this.height][this.width];
 
-        drawLine(0, 0, width-1, 0, verticalChar); //Top border
-        drawLine(0, 1, 0, height-2, horizontalChar); //left border
-        drawLine(width-1, 1, width-1, height-2, horizontalChar); //right
-        drawLine(0, height-1, width-1, height-1, verticalChar); //bottom border
+        drawLine(0, 0, width-1, 0, verticalChar, true); //Top border
+        drawLine(0, 1, 0, height-2, horizontalChar,true); //left border
+        drawLine(width-1, 1, width-1, height-2, horizontalChar, true); //right
+        drawLine(0, height-1, width-1, height-1, verticalChar, true); //bottom border
 
     }
 
@@ -44,12 +44,17 @@ public class Canvas {
      * @param y2 - makes up up the first point y coordinate
      */
     public void drawLine(int x1, int y1, int x2, int y2 ) {
-        drawLine(x1, y1, x2, y2, lineChar);
+       drawLine(x1, y1, x2, y2, lineChar, false);
 
     }
 
-    private void drawLine(int x1, int y1, int x2, int y2 , char character) {
+    private void drawLine(int x1, int y1, int x2, int y2 , char character, boolean isCanvasSetup) {
 
+        //do some validation so that the inputs are within the canvas area
+        if (!isCanvasSetup && (x1 < 1 || x1 >= width || y1 < 1 || y1 >= height)) {
+            //throw new runtime exception
+            throw  new RuntimeException("Parameters must be within the canvas");
+        }
         for (int row=y1; row <= y2 ;row++) {
             for (int col=x1; col<=x2; col++) {
                 cnvsArray[row][col] = character;
@@ -87,6 +92,12 @@ public class Canvas {
 
     private void drawRectangle(int x1, int y1, int x2, int y2, char character) {
 
+        //do some validation so that the inputs are within the canvas area
+        if (x1 < 1 || x1 >= width || y1 < 1 || y1 >= height) {
+            //throw new runtime exception
+            throw  new RuntimeException("Parameters must be within the canvas");
+        }
+
         // check if the coordinates are correct
         if (x2 <= x1 || y2 <= y1 ) {
             //throw runtime exception - coordinates need to make up top left and botom right.
@@ -98,10 +109,10 @@ public class Canvas {
         Point bottomRight = new Point(x2, y2);
 
         //draw the lines of the rectangle
-        drawLine(topLeft.getXCoordinate(), topLeft.getYCoordinate(), topRight.getXCoordinate(), topRight.getYCoordinate(),character );
-        drawLine(topLeft.getXCoordinate(), topLeft.getYCoordinate(), bottomLeft.getXCoordinate(), bottomLeft.getYCoordinate(), character);
-        drawLine(topRight.getXCoordinate(), topRight.getYCoordinate(), bottomRight.getXCoordinate(), bottomRight.getYCoordinate(), character);
-        drawLine(bottomLeft.getXCoordinate(), bottomLeft.getYCoordinate(), bottomRight.getXCoordinate(), bottomRight.getYCoordinate(), character);
+        drawLine(topLeft.getXCoordinate(), topLeft.getYCoordinate(), topRight.getXCoordinate(), topRight.getYCoordinate(),character, false );
+        drawLine(topLeft.getXCoordinate(), topLeft.getYCoordinate(), bottomLeft.getXCoordinate(), bottomLeft.getYCoordinate(), character, false);
+        drawLine(topRight.getXCoordinate(), topRight.getYCoordinate(), bottomRight.getXCoordinate(), bottomRight.getYCoordinate(), character, false);
+        drawLine(bottomLeft.getXCoordinate(), bottomLeft.getYCoordinate(), bottomRight.getXCoordinate(), bottomRight.getYCoordinate(), character, false);
 
     }
 
